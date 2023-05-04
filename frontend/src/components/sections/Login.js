@@ -42,6 +42,8 @@ const Login = ({
     className
   );
 
+  
+
   const handleToggle = () => {
     toggleComponent();
   };
@@ -53,7 +55,19 @@ const Login = ({
       LocalStorageService.setSessionData(res.data);
       LocalStorageService.setToken(res.data.token);
       alert('Logged in successfully');
-      history.push('/desktop');
+      if(res.data.role) {
+        if(!res.data.compled) {
+          history.push('/complete-profile');
+          window.location.reload();
+          return;
+        }
+        history.push('/mobile');
+        window.location.reload();
+      } else {
+        history.push('/desktop');
+        window.location.reload();
+      }
+      
     },(err)=> {
       alert(err.response.data.message);
     })
@@ -61,7 +75,7 @@ const Login = ({
 
   return (
     <section {...props} className={outerClasses}>
-      <div className="container">
+      <div id="login" className="container">
 
           <div className="box">
             <h2>Sign in</h2>

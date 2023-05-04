@@ -77,12 +77,16 @@ router.get("/details", (req, res) => {
   );
 });
 
-/**
- * Rota de detalhes do usuário (eliminando dados sensíveis).
- */
-router.get("/details-sensitive", (req, res) => {
-  let token = req.header("Authorization");
-  userService.getUserByToken(token, true).then(
+
+router.post("/complete-profile", (req, res) => {
+  const token = req.header("Authorization");
+  try {
+    userValidator.validateCompleteProfile(req.body);
+  } catch (err) {
+    res.status(400).send(routeUtil.errorMessage(err.message));
+    return;
+  }
+  userService.completeProfile(req.body.description,req.body.price,req.body.picture,token).then(
     (user) => {
       res.send(user);
     },
@@ -93,6 +97,9 @@ router.get("/details-sensitive", (req, res) => {
     }
   );
 });
+
+
+
 
 
 

@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { SectionProps } from "../../utils/SectionProps";
+import { useHistory } from 'react-router-dom';
 import "../../css/form.css";
 import { Link } from "react-router-dom";
 import UserService from "../../services/UserService";
+import LocalStorageService from "../../services/LocalStorageService";
 const propTypes = {
   ...SectionProps.types,
   split: PropTypes.bool,
@@ -28,6 +30,7 @@ const SignUp = ({
   split,
   ...props
 }) => {
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -51,8 +54,12 @@ const SignUp = ({
     e.preventDefault();
 
     UserService.signup(email,password,fullname,role).then((res)=> {
+      
+      delete res.data.password;
+      LocalStorageService.setSessionData(res.data);
+      LocalStorageService.setToken(res.data.token);
       alert('Account Created sucessfully');
-      handleToggle();
+      history.push('/desktop');
 
     },(err)=> {
       alert(err.response.data.message);

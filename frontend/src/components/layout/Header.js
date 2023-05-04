@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 import Image from "../elements/Image";
-
+import { useHistory } from 'react-router-dom';
+import LocalStorageService from "../../services/LocalStorageService";
 const propTypes = {
   navPosition: PropTypes.string,
   hideNav: PropTypes.bool,
@@ -29,12 +30,26 @@ const Header = ({
   bottomDivider,
   ...props
 }) => {
+  const history = useHistory();
   const [isActive, setIsactive] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const nav = useRef(null);
   const hamburger = useRef(null);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  useEffect(() => {
+
+  }, [isLoggedIn]);
   useEffect(() => {
     isActive && openMenu();
     document.addEventListener("keydown", keyPress);
@@ -46,19 +61,17 @@ const Header = ({
     };
   });
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, []);
-
   const openMenu = () => {
     document.body.classList.add("off-nav-is-active");
     nav.current.style.maxHeight = nav.current.scrollHeight + "px";
     setIsactive(true);
+  };
+
+  const logout = () => {
+    LocalStorageService.killSession();
+    history.push('/');
+    window.location.reload();
+
   };
 
   const closeMenu = () => {
@@ -136,28 +149,59 @@ const Header = ({
                           navPosition && `header-nav-${navPosition}`
                         )}
                       >
-                        <li>
-                          <Link
-                            to="/#login"
-                            className="button button-white button-wide-mobile button-sm"
-                           
-                          >
-                            Login
-                          </Link>
-                        </li>
-                      </ul>
-                      {!hideSignin && (
-                        <ul className="list-reset header-nav-right">
+                        {isLoggedIn ? (
                           <li>
                             <Link
-                              to="/#signup"
-                              className="button button-primary button-wide-mobile button-sm"
+                              to="/reservations"
+                              className="button button-white button-wide-mobile button-sm"
                             >
-                              Sign up
+                              My reservations
                             </Link>
                           </li>
-                        </ul>
-                      )}
+                          
+                        ) : (
+                          <li>
+                            <Link
+                              to="/#login"
+                              className="button button-primary button-wide-mobile button-sm"
+                            >
+                              Login
+                            </Link>
+                          </li>
+                        )}
+                      </ul>
+                      <ul
+                        className={classNames(
+                          "list-reset text-xs",
+                          navPosition && `header-nav-${navPosition}`
+                        )}
+                      >
+                        {isLoggedIn ? (
+                          <li>
+                            <button
+                            style={{ 
+                              
+                              marginLeft: "18px",
+                            
+                            }}
+                              onClick={logout}
+                              className="button button-dark button-wide-mobile button-sm"
+                            >
+                             Logout
+                            </button>
+                          </li>
+                          
+                        ) : (
+                          <li>
+                            <Link
+                              to="/#login"
+                              className="button button-white button-wide-mobile button-sm"
+                            >
+                               Sign in
+                            </Link>
+                          </li>
+                        )}
+                      </ul>
                     </div>
                   </>
                 )}

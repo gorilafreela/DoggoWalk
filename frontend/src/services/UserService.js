@@ -36,4 +36,20 @@ export default class UserService {
       },
     });
   }
+
+  static completeProfile(description, price, picture) {
+    return axios({
+      url: APIConstants.baseURL + "user/complete-profile",
+      method: "POST",
+      headers: {
+        Authorization: LocalStorageService.getToken(),
+      },
+      data: {
+        completed:1,
+        description:description, 
+        price:price, 
+        picture:picture
+      },
+    });
+  }
 }

@@ -4,6 +4,7 @@ import { SectionProps } from "../../utils/SectionProps";
 import ButtonGroup from "../elements/ButtonGroup";
 import Button from "../elements/Button";
 import Image from "../elements/Image";
+import { Link } from "react-router-dom";
 
 const propTypes = {
   ...SectionProps.types,
@@ -23,10 +24,6 @@ const Hero = ({
   invertColor,
   ...props
 }) => {
-
-
-  
-
   const outerClasses = classNames(
     "hero section center-content",
     topOuterDivider && "has-top-divider",
@@ -67,13 +64,20 @@ const Hero = ({
               </p>
               <div className="reveal-from-bottom" data-reveal-delay="600">
                 <ButtonGroup>
-                  <Button tag="a" color="white" wideMobile href="/">
+                  <Link
+                    to="/login"
+                    className="button button-white button-wide-mobile button-sm"
+                  >
                     Login
-                  </Button>
-                  <Button tag="a" color="primary" wideMobile href="/">
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="button button-primary button-wide-mobile button-sm"
+                  >
                     Sign up
-                  </Button>
+                  </Link>
                 </ButtonGroup>
+                
               </div>
             </div>
           </div>

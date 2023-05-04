@@ -84,7 +84,7 @@ const FeaturesSplit = ({
                   imageFill && "split-item-image-fill"
                 )}
                 data-reveal-container=".split-item"
-              >
+              >                
                 <img
                   src={require("./../../assets/images/livetracking.png")}
                   alt="Example"
@@ -92,6 +92,8 @@ const FeaturesSplit = ({
                     maxWidth: "50%",
                     height: "auto",
                   }}
+
+                  
                 />
               </div>
             </div>
@@ -126,8 +128,7 @@ const FeaturesSplit = ({
                 <Image
                   src={require("./../../assets/images/dogwalker.jpg")}
                   alt="Features split 02"
-                  width={528}
-                  height={396}
+                  
                 />
               </div>
             </div>

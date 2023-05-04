@@ -32,10 +32,23 @@ function validateLoginUserData(data) {
   }
 }
 
+function validateCompleteProfile(data) {
+  if (!data.description) {
+    throw new AppError("Description is mandatory");
+  } else if (!data.price) {
+    throw new AppError("Price is mandatory");
+  } else if (!data.picture) {
+    throw new AppError("Picture is mandatory");
+  } else if ( typeof data.price != "number" || data.price < 0 ) {
+    throw new AppError("Price should be an positive Integer");
+  }  
+}
+
 /**
  * Exportação.
  */
 module.exports = {
   validateAddUserData,
   validateLoginUserData,
+  validateCompleteProfile
 };

@@ -12,17 +12,23 @@ async function add(email, password, fullname, role) {
     throw new AppError(`E-mail not avaiable.`);
   }
   role = parseInt(role);
-  //security 
+  //security
   password = securityUtil.generateSha256Hash(password);
   let token = securityUtil.generateSha256Token(
     password + datetimeUtil.getDateTime()
   );
   let expirationToken = datetimeUtil.getFututeDateTimeByDays(
-    datetimeUtil.getDateTime(),30
+    datetimeUtil.getDateTime(),
+    30
   );
 
   return await userRepository.addDocument(
-    email, password, fullname, role, token, expirationToken
+    email,
+    password,
+    fullname,
+    role,
+    token,
+    expirationToken
   );
 }
 
@@ -35,11 +41,11 @@ async function login(email, password) {
   }
 
   user = await userRepository.findByEmail(email);
-  user = objUtil.mongoToJson(user)
-  
+  user = objUtil.mongoToJson(user);
 
   let expirationToken = datetimeUtil.getFututeDateTimeByDays(
-    datetimeUtil.getDateTime(),30
+    datetimeUtil.getDateTime(),
+    30
   );
 
   let token = securityUtil.generateSha256Token(
@@ -47,7 +53,6 @@ async function login(email, password) {
   );
   return await userRepository.updateToken(user._id, token, expirationToken);
 }
-
 
 /**
  * Obter dados do usuário pelo token.
@@ -86,10 +91,29 @@ async function getUserById(id) {
   return user;
 }
 
+async function completeProfile(description, price, picture, token) {
+  let user = await userRepository.findByToken(token);
+  if (!user) {
+    throw new AppError(`Invalid Token`);
+  }
+  user = objUtil.mongoToJson(user);
+  if (user.role != 1) {
+    throw new AppError(`Not valid user to this action`);
+  }
+
+  const data = {
+    description,
+    price,
+    picture,
+  };
+
+  return await userRepository.updateById(user._id,data);
+}
 
 module.exports = {
   add,
   login,
   getUserByToken,
   getUserById,
+  completeProfile,
 };
