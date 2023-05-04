@@ -1,0 +1,77 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.box {
+  position: relative;
+  margin: 0 auto;
+  max-width: 400px;
+  padding: 40px;
+  background: #7e80ff;
+  box-sizing: border-box;
+  border-radius: 22px;
+}
+
+.box h2 {
+  margin: 0 0 30px;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+
+.box .inputbox {
+  position: relative;
+}
+.default-form {
+  display: flex;
+  flex-direction: column;
+}
+.box .inputbox input {
+  width: 100%;
+  padding: 22px 0px 8px 0px;
+  font-size: 12px;
+  color: #fff;
+  letter-spacing: 1px;
+
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+}
+
+.box .inputbox label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.box .inputbox input:focus ~ label,
+.box .inputbox input:not(:placeholder-shown) ~ label {
+  top: -18px;
+  left: 0;
+  color: #fff;
+  font-size: 12px;
+}
+
+.box .inputbox input:focus ~ label,
+.box .inputbox input:valid ~ label {
+  top: -18px;
+  left: 0;
+  color: #fff;
+  font-size: 12px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: white !important;
+  color: white !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
