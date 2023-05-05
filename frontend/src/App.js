@@ -12,6 +12,7 @@ import Home from './views/Home';
 import Desktop from './views/Desktop';
 import CompleteProfile from './views/CompleteProfile';
 import Mobile from './views/Mobile';
+import MapTracking from './views/MapTracking';
 // Initialize Google Analytics
 ReactGA.initialize(process.env.REACT_APP_GA_CODE);
 
@@ -41,6 +42,7 @@ const App = () => {
           <AppRoute exact path="/desktop" component={Desktop} layout={LayoutDefault} />
           <AppRoute exact path="/complete-profile" component={CompleteProfile} layout={LayoutDefault} />
           <AppRoute exact path="/mobile" component={Mobile} layout={LayoutDefault} />
+          <AppRoute exact path="/map" component={MapTracking} layout={LayoutDefault} />
         </Switch>
       )} />
   );

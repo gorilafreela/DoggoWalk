@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,11 +9,21 @@
     <link rel="apple-touch-icon" href="logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Welcome - DoggoWalk</title>
-</head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/leaflet/dist/leaflet.css"
+      crossorigin=""
+    />
+    <style>
+      .leaflet-container {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+  </head>
 
-<body class="has-animations">
+  <body class="has-animations">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root" class="body-wrap"></div>
-</body>
-
+  </body>
 </html>

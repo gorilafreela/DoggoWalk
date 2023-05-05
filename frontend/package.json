@@ -6,12 +6,14 @@
     "@react-icons/all-files": "^4.1.0",
     "axios": "^1.4.0",
     "classnames": "^2.2.6",
+    "leaflet": "^1.9.3",
     "lodash": "^4.17.21",
     "node-sass": "^4.14.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "react-ga": "^2.7.0",
     "react-icons": "^4.8.0",
+    "react-leaflet": "^4.2.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1"
   },
@@ -28,17 +30,10 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {}
 }
