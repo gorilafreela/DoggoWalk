@@ -100,15 +100,22 @@ async function completeProfile(description, price, picture, token) {
   if (user.role != 1) {
     throw new AppError(`Not valid user to this action`);
   }
-
+  const completed = 1;
   const data = {
     description,
     price,
     picture,
+    completed,
   };
 
-  return await userRepository.updateById(user._id,data);
+  return await userRepository.updateById(user._id, data);
 }
+
+async function getAllCompleted() {
+  let users = await userRepository.getAllCompleted();
+  return users;
+}
+
 
 module.exports = {
   add,
@@ -116,4 +123,5 @@ module.exports = {
   getUserByToken,
   getUserById,
   completeProfile,
+  getAllCompleted,
 };

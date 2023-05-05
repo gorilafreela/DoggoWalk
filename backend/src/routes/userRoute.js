@@ -78,6 +78,21 @@ router.get("/details", (req, res) => {
 });
 
 
+router.get("/get-all", (req, res) => {
+  userService.getAllCompleted().then(
+    (users) => {
+      res.send(users);
+    },
+    (err) => {
+      routeUtil.processRouteError(err).then((status) => {
+        res.status(status).send(routeUtil.errorMessage(err.message));
+      });
+    }
+  );
+});
+
+
+
 router.get("/today", (req, res) => {
   const today = new Date();
   res.send(today)

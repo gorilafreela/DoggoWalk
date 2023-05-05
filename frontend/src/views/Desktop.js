@@ -1,43 +1,15 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import classNames from "classnames";
+import { useHistory } from "react-router-dom";
 import { SectionTilesProps } from "../utils/SectionProps";
 import SectionHeader from "../components/sections/partials/SectionHeader";
-import CardWalker from "../components/elements/CardWalker"
-
+import CardWalker from "../components/elements/CardWalker";
+import LocalStorageService from "../services/LocalStorageService";
+import UserService from "../services/UserService";
+import SolicitationService from "../services/SolicitationService";
 const propTypes = {
   ...SectionTilesProps.types,
 };
-
-const walkersData = [
-  {
-    id: 1,
-    name: "John",
-    price: "$25/hour",
-    picture:
-      "https://www.mundoecologia.com.br/wp-content/uploads/2019/10/Dog-Walker-e1571683007586.jpg",
-    description:
-      "Energetic person, who loves animals, I try to connect to each of pet I walk with.",
-  },
-  {
-    id: 2,
-    name: "Anne",
-    price: "$27/hour",
-    picture:
-      "https://veterinariadavinci.com.br/blog/wp-content/uploads/2017/10/dicas-para-escolher-um-dog-walker.jpg",
-    description:
-      "Energetic person, who loves animals, I try to connect to each of pet I walk with.",
-  },
-  {
-    id: 3,
-    name: "Laura",
-    price: "$21/hour",
-    picture:
-      "https://www.giftideasunwrapped.com/wp-content/uploads/2020/02/Feature-91-1.jpg",
-    description:
-      "Energetic person, who loves animals, I try to connect to each of pet I walk with.",
-  },
-  
-];
 
 const defaultProps = {
   ...SectionTilesProps.defaults,
@@ -53,6 +25,75 @@ const Walkers = ({
   pushLeft,
   ...props
 }) => {
+  const [walkers, setWalkers] = useState([]);
+  const [solicitations, setSolicitations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const history = useHistory();
+  const initialWalkersRef = useRef([]);
+  useEffect(() => {
+    const session = LocalStorageService.getSessionData();
+    if (!session.role) {
+      return;
+    }
+    if (session.hasOwnProperty("completed")) {
+      history.push("/mobile");
+      return;
+    }
+    history.push("/complete-profile");
+  });
+
+
+  useEffect(() => {
+    UserService.getAll()
+      .then((res) => {
+        setWalkers(res.data);
+
+        SolicitationService.getAllProgress().then(
+          (res) => {
+            setSolicitations(res.data);
+            setLoading(false);
+          },
+          (err) => {
+            alert(err.response.data.message);
+          }
+        );
+      })
+      .catch((err) => {
+      console.log(err)
+      });
+  }, []);
+
+  useEffect(() => {
+    if (solicitations.length > 0) {
+      const initialWalkers = initialWalkersRef.current;
+      const updatedWalkers = walkers.map((walker) => {
+        const matchingSolicitation = solicitations.find(
+          (solicitation) =>
+            solicitation.to === walker._id
+        );
+          console.log(matchingSolicitation)
+        if (matchingSolicitation) {
+          return {
+            ...walker,
+            pending: 1,
+            solicitationId: matchingSolicitation._id,
+          };
+        } else {
+          return {
+            ...walker,
+            pending: 0,
+            solicitationId: null,
+          };
+        }
+      });
+      if (JSON.stringify(initialWalkers) !== JSON.stringify(updatedWalkers)) {
+        setWalkers(updatedWalkers);
+        initialWalkersRef.current = updatedWalkers;
+        setLoading(false)
+      }
+    }
+  }, [solicitations, walkers]);
+
   const outerClasses = classNames(
     "features-tiles section",
     topOuterDivider && "has-top-divider",
@@ -67,8 +108,6 @@ const Walkers = ({
     topDivider && "has-top-divider",
     bottomDivider && "has-bottom-divider"
   );
-
-
 
   const sectionHeader = {
     title: "Find the Perfect Pet Walker",
@@ -85,28 +124,34 @@ const Walkers = ({
     "gap-4"
   );
   return (
-    <section  className={outerClasses}>
-    <div className="container">
-      <div className={innerClasses}>
-        <SectionHeader
-          style={{ marginTop: "80px" }}
-          data={sectionHeader}
-          className="center-content"
-        />
-        <div className={gridClasses}>
-          {walkersData.map((walker) => (
-            <CardWalker
-              key={walker.id}
-              name={walker.name}
-              price={walker.price}
-              picture={walker.picture}
-              description={walker.description}
-            />
-          ))}
+    <section className={outerClasses}>
+      <div className="container">
+        <div className={innerClasses}>
+          <SectionHeader
+            style={{ marginTop: "80px" }}
+            data={sectionHeader}
+            className="center-content"
+          />
+          {!loading && (
+            <div className={gridClasses}>
+              {walkers.map((walker) => (
+                <CardWalker
+                  key={walker._id}
+                  name={walker.fullname}
+                  price={"$ " + walker.price}
+                  picture={walker.picture}
+                  description={walker.description}
+                  id={walker._id}
+                  pending={walker.pending}
+                  solicitationId={walker.solicitationId}
+                 
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
-    </div>
-  </section>
+    </section>
   );
 };
 

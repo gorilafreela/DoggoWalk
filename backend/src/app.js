@@ -8,6 +8,8 @@ const moment = require('moment')
 const urlUtil = require('./utils/urlUtil')
 //const datetimeUtil = require(urlUtil.getPath('./utils/datetimeUtil.min.js'));
 const loginMiddleware = require(urlUtil.getPath('./middlewares/loginMiddleware.min.js'));
+const http = require('http');
+const locationSocket = require(urlUtil.getPath('./sockets/locationSocket.min.js')).location;
 
 
 
@@ -20,6 +22,7 @@ if (process.env.NODE_ENV !== 'production') {
  * Express
  */
 const app = express()
+const server = http.createServer(app);
 app.use(express.json({limit: '10mb'}));
 app.use(express.json())
 app.use(cors())
@@ -36,10 +39,16 @@ const port = 5000;
 moment.locale('pt-br')
 
 /**
+ * Configuring sockets
+ */
+locationSocket(server);
+
+/**
  * Configuring Routes
  */
 app.use('/user', require(urlUtil.getPath('./routes/userRoute.min.js')));
-// datetimeUtil.processRefreshToken();
+app.use('/solicitation', require(urlUtil.getPath('./routes/solicitationRoute.min.js')));
+
 
 
 const os = require('os');

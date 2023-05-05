@@ -52,4 +52,11 @@ export default class UserService {
       },
     });
   }
+
+  static getAll() {
+    return axios({
+      url: APIConstants.baseURL + "user/get-all",
+      method: "GET"
+    });
+  }
 }

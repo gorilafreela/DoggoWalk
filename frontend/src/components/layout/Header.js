@@ -151,12 +151,7 @@ const Header = ({
                       >
                         {isLoggedIn ? (
                           <li>
-                            <Link
-                              to="/reservations"
-                              className="button button-white button-wide-mobile button-sm"
-                            >
-                              My reservations
-                            </Link>
+                            
                           </li>
                           
                         ) : (
