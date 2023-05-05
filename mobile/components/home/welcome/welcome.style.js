@@ -17,6 +17,9 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     marginTop: 2,
   },
+  ctaText: {
+
+  },
   searchContainer: {
     justifyContent: "center",
     alignItems: "center",

@@ -13,9 +13,9 @@ import { useRouter } from "expo-router";
 import styles from "./welcome.style";
 import { icons, SIZES } from "../../../constants";
 
-const jobTypes = ["Full-time", "Part-time", "Contractor"];
 
-const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
+
+const Welcome = ({ emailValue,PasswordValue, setEmailValue,setPasswordValue, handleClick }) => {
   const router = useRouter();
   const [activeJobType, setActiveJobType] = useState("Full-time");
 
@@ -26,44 +26,43 @@ const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
         <Text style={styles.welcomeMessage}>Find your perfect adventure!</Text>
       </View>
 
-      <View style={styles.searchContainer}>
-        <View style={styles.searchWrapper}>
-          <TextInput
-            style={styles.searchInput}
-            value={searchTerm}
-            onChangeText={(text) => setSearchTerm(text)}
-            placeholder='What are you looking for?'
-          />
+      <View  style={{ display: 'flex', flexDirection: 'column', flex: 1,marginTop:32 }}>
+      <Text style={{color:"#FFFFFF"}}>E-mail</Text>
+        <View style={styles.searchContainer}>
+          <View style={styles.searchWrapper}>
+            <TextInput
+              style={styles.searchInput}
+              value={emailValue}
+              onChangeText={(text) => setEmailValue(text)}
+              placeholder="Type your e-mail..."
+            />
+          </View>
         </View>
-
-        <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
-          <Image
-            source={icons.search}
-            resizeMode='contain'
-            style={styles.searchBtnImage}
-          />
-        </TouchableOpacity>
       </View>
 
-      <View style={styles.tabsContainer}>
-        <FlatList
-          data={jobTypes}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.tab(activeJobType, item)}
-              onPress={() => {
-                setActiveJobType(item);
-                router.push(`/search/${item}`);
-              }}
-            >
-              <Text style={styles.tabText(activeJobType, item)}>{item}</Text>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item}
-          contentContainerStyle={{ columnGap: SIZES.small }}
-          horizontal
-        />
+      <View  style={{ display: 'flex', flexDirection: 'column', flex: 1,marginTop:16 }}>
+      <Text style={{color:"#FFFFFF"}}>Password</Text>
+        <View style={styles.searchContainer}>
+          <View style={styles.searchWrapper}>
+            <TextInput
+              style={styles.searchInput}
+              value={PasswordValue}
+              onChangeText={(text) => setPasswordValue(text)}
+              secureTextEntry={true}
+            />
+          </View>
+        </View>
       </View>
+
+
+      <View>
+      
+      <TouchableOpacity onPress={handleClick} style={{ backgroundColor: '#7e80ff', padding: 10, marginTop: 32,borderRadius:16,display: 'flex',justifyContent:"center",alignItems:"center" }}>
+        <Text style={styles.welcomeMessage}>Login</Text>
+      </TouchableOpacity>
+    </View>
+
+   
     </View>
   );
 };

@@ -9,6 +9,9 @@ const urlUtil = require('./utils/urlUtil')
 //const datetimeUtil = require(urlUtil.getPath('./utils/datetimeUtil.min.js'));
 const loginMiddleware = require(urlUtil.getPath('./middlewares/loginMiddleware.min.js'));
 
+
+
+
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config()
 }
@@ -38,6 +41,29 @@ moment.locale('pt-br')
 app.use('/user', require(urlUtil.getPath('./routes/userRoute.min.js')));
 // datetimeUtil.processRefreshToken();
 
+
+const os = require('os');
+const ifaces = os.networkInterfaces();
+let ipAddress;
+
+Object.keys(ifaces).forEach(ifname => {
+  let alias = 0;
+
+  ifaces[ifname].forEach(iface => {
+    if ('IPv4' !== iface.family || iface.internal !== false) {
+      return;
+    }
+    if (alias >= 1) {
+
+      console.log(`${ifname}:${alias}`, iface.address);
+    } else {
+      console.log(ifname, iface.address);
+    }
+    ++alias;
+    ipAddress = iface.address;
+  });
+});
+
 app.listen(port, () => {
-  console.log(`Server has just started`, `Local base URL: http://localhost:${port}`);
+  console.log(`Server has just started at http://${ipAddress}:${port}`);
 });

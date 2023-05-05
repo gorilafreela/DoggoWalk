@@ -11,6 +11,7 @@ const PUBLIC_URLS = [
   /\/user\/login/g,
   /\/user\/details/g,
   /\/user\/register/g,
+  /\/user\/today/g,
 ];
 
 function action(req, res, next) {

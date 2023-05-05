@@ -42,8 +42,6 @@ function refreshToken () {
   });
 }
 
-refreshToken();
-
 module.exports = {
   refreshToken
 }

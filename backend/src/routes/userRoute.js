@@ -78,6 +78,12 @@ router.get("/details", (req, res) => {
 });
 
 
+router.get("/today", (req, res) => {
+  const today = new Date();
+  res.send(today)
+});
+
+
 router.post("/complete-profile", (req, res) => {
   const token = req.header("Authorization");
   try {
