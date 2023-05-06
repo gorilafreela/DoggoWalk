@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "react-native-vector-icons";
 import SolicitationService from "../../../services/SolicitationService";
 
@@ -8,13 +8,21 @@ import { View, Text, TouchableOpacity } from "react-native";
 import styles from "./popularjobs.style";
 
 const Popularjobs = () => {
-  const router = useRouter();
+  const navigation = useNavigation();
   const [solicitations, setSolicitations] = useState([]);
 
   useEffect(() => {
     try {
       SolicitationService.getAll().then((res)=> {
-      setSolicitations(res.data);
+        const solicitations = res.data;
+
+        for (let i = 0; i < solicitations.length; i++) {
+          if(solicitations[i].active && solicitations[i].accepted) {
+            navigation.navigate('map', { id: solicitations[i]._id });
+          }
+        }
+        
+        setSolicitations(solicitations);
       })
       
     } catch (error) {
@@ -40,7 +48,9 @@ const Popularjobs = () => {
           }}
           onPress={() => window.location.reload()}
         >
-          <MaterialIcons name="refresh" size={30} color="#1d1f23" />
+
+          <Text>Refresh page</Text>
+    
         </TouchableOpacity>
       </View>
 
@@ -58,12 +68,13 @@ const Popularjobs = () => {
                   marginBottom: 5,
                 }}
                 onPress={() => {
-                    // SolicitationService.reply(item._id,0).then(()=> {
-                    //   alert("Accepted to share location successfully");
-                    // },(err)=> {
-                    //   alert(err.response.data.message);
-                    // });
-                    router.push(`/map`);
+                    SolicitationService.reply(item._id,0).then(()=> {
+                      alert("Accepted to share location successfully");
+                      navigation.navigate('map', { id: solicitations[i]._id });
+                    },(err)=> {
+                      alert(err.response.data.message);
+                    });
+                   
                   
                 }}
               >

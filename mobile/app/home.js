@@ -17,8 +17,8 @@ const Home = () => {
     const checkToken = async () => {
       const token = await getData("token");
       if (token) {
-      //  router.push(`/jobs`);
-       router.push(`/map`);
+       router.push(`/jobs`);
+
       }
     };
     checkToken();

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
   jobName: {
     fontSize: SIZES.medium,
-    fontFamily: "DMBold",
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
     color: COLORS.primary,
   },
   jobType: {

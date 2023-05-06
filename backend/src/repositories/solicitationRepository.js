@@ -32,7 +32,6 @@ async function getAllByTo(to) {
   return await Solicitation.find({
     to: to,
     active: 1,
-    accepted: 0,
   });
 }
 
