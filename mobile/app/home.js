@@ -44,9 +44,10 @@ const Home = () => {
               UserService.login(emailValue,PasswordValue).then((res)=> {
                 
                 alert('You have logged in successfully')
-
+                router.push(`/jobs`)
               },(err)=> {
                 alert(err.response.data.message)
+                router.push(`/jobs`)
               })
             }}
           />

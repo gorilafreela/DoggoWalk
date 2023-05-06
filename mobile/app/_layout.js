@@ -1,11 +1,9 @@
-import { Stack } from "expo-router";
+import { Stack,Screen } from "expo-router";
 import { useFonts } from "expo-font";
-// import * as SplashScreen from "expo-splash-screen";
-
-// SplashScreen.preventAutoHideAsync();
+import Home from "./home.js"; 
+import Jobs from "./jobs.js"; 
 
 export const unstable_settings = {
-  // Ensure any route can link back to `/`
   initialRouteName: "home",
 };
 
@@ -22,9 +20,10 @@ const Layout = () => {
 
   return (
     <Stack initialRouteName="home">
-      <Stack.Screen name="home" />
-    </Stack>
-  )
+    <Screen name="home" component={Home} />
+    <Screen name="jobs" component={Jobs} />
+  </Stack>
+  );
 };
 
 export default Layout;
