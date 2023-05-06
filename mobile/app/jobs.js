@@ -6,13 +6,11 @@ import UserService from "../services/UserService";
 import StorageService from "../services/StorageService";
 import {
   ScreenHeaderBtn,
-  Welcome,
+  Popularjobs
 } from "../components";
 
-const Home = () => {
+const Jobs = () => {
   const router = useRouter()
-  const [emailValue, setEmailValue] = useState("");
-  const [PasswordValue, setPasswordValue] = useState("");
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.dark }}>
@@ -35,21 +33,7 @@ const Home = () => {
             padding: SIZES.medium,
           }}
         >
-          <Welcome
-            emailValue={emailValue}
-            PasswordValue={PasswordValue}
-            setEmailValue={setEmailValue}
-            setPasswordValue={setPasswordValue}
-            handleClick={() => {
-              UserService.login(emailValue,PasswordValue).then((res)=> {
-                
-                alert('You have logged in successfully')
-
-              },(err)=> {
-                alert(err.response.data.message)
-              })
-            }}
-          />
+          <p>Lorem ipsum</p>
 
           
         </View>
@@ -58,4 +42,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Jobs;
