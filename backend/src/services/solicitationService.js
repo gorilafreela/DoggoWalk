@@ -43,6 +43,12 @@ async function getAllByTo(token) {
   }
   user =  objUtil.mongoToJson(user);
   let solicitations = await solicitationRepository.getAllByTo(user._id);
+  for (let i = 0; i < solicitations.length; i++) {
+    solicitations[i] = objUtil.mongoToJson(solicitations[i]);  
+    let user = await userRepository.findById(solicitations[i].from);
+    user = objUtil.mongoToJson(user);
+    solicitations[i].fullname = user.fullname;
+  }
   return solicitations;
 }
 
@@ -129,8 +135,6 @@ async function cancel(to,token) {
   await solicitationRepository.cancel(fromUser._id,toUser._id);
   return "deleted"
 }
-
-
 
 module.exports = {
   add,getAllByTo,reply,getBook,cancel,getAllAwaiting,getAllProgress

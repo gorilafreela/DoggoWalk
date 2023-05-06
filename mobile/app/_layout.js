@@ -1,6 +1,6 @@
 import { Stack,Screen } from "expo-router";
 import { useFonts } from "expo-font";
-import {Home,Jobs} from "./"; 
+import {Home,Jobs,Map} from "./"; 
 
 
 export const unstable_settings = {
@@ -22,6 +22,7 @@ const Layout = () => {
   <Stack initialRouteName="home">
     <Screen name="home" component={Home} />
     <Screen name="jobs" component={Jobs} />
+    <Screen name="map" component={Map} />
   </Stack>
   );
 };

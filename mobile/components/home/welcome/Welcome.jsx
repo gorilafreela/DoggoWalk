@@ -17,7 +17,7 @@ import { icons, SIZES } from "../../../constants";
 
 const Welcome = ({ emailValue,PasswordValue, setEmailValue,setPasswordValue, handleClick }) => {
   const router = useRouter();
-  const [activeJobType, setActiveJobType] = useState("Full-time");
+
 
   return (
     <View>

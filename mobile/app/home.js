@@ -15,11 +15,10 @@ const Home = () => {
   const [PasswordValue, setPasswordValue] = useState("");
   useEffect(() => {
     const checkToken = async () => {
-      console.log("Checking token...");
       const token = await getData("token");
-      alert("Token: " + token)
       if (token) {
-        router.push(`/jobs`);
+      //  router.push(`/jobs`);
+       router.push(`/map`);
       }
     };
     checkToken();
@@ -53,7 +52,6 @@ const Home = () => {
             handleClick={() => {
               UserService.login(emailValue,PasswordValue).then((res)=> {
                storeData('token',res.data.token);
-
                 alert('You have logged in successfully')
                 router.push(`/jobs`)
               },(err)=> {

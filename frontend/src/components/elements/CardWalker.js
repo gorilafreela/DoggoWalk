@@ -54,6 +54,7 @@ const CardWalker = ({
     console.log("isLoading:", isLoading);
     console.log("solicitationId:", solId);
     console.log("isSharingLocation:", isSharingLocation);
+
   }, [isLoading,solId,isSharingLocation]);
 
 
@@ -64,6 +65,9 @@ const CardWalker = ({
           console.log(response.data);
           setIsAccepted(response.data.accepted === 1);
           setIsActive(response.data.active === 1);
+
+         
+        
         });
       }
     }, 3000);
@@ -71,8 +75,8 @@ const CardWalker = ({
     
     if (!isLoading) {
       clearInterval(intervalId);
-    }
-  
+    } 
+    
     return () => clearInterval(intervalId);
   }, [isLoading, solId]);
 

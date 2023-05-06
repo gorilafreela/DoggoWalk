@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   solicitationTitle: {
     fontSize: SIZES.medium,
     fontFamily: FONT.medium,
-    color: COLORS.dark,
+    color: "#000000",
     alignSelf: "flex-start",
   },
   headerBtn: {

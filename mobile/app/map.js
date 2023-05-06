@@ -4,22 +4,40 @@ import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images, SIZES } from "../constants";
 import {clearSession} from "../services/StorageService";
 import { getData } from "../services/StorageService";
-import { ScreenHeaderBtn, Popularjobs } from "../components";
+import { ScreenHeaderBtn } from "../components";
 import { MaterialIcons } from "react-native-vector-icons";
-const Jobs = () => {
+//import MapView, { Marker } from "react-native-maps";
+//import Geolocation from "react-native-geolocation-service";
+
+
+const Map = () => {
   const router = useRouter();
+  const [userLocation, setUserLocation] = useState(null);
   useEffect(() => {
     const checkToken = async () => {
-      const token = await getData("token");
-      
+      const token = await getData('token');
+
       if (!token) {
         router.push(`/home`);
       }
     };
     checkToken();
-    
-  }, [router]);
 
+    // Geolocation.getCurrentPosition(
+    //   position => {
+    //     setUserLocation({
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude,
+    //       latitudeDelta: 0.015,
+    //       longitudeDelta: 0.0121,
+    //     });
+    //   },
+    //   error => {
+    //     console.log(error.code, error.message);
+    //   },
+    //   { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+    // );
+  }, [router]);
   
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.dark }}>
@@ -30,7 +48,7 @@ const Jobs = () => {
           headerLeft: () => (
             <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
           ),
-          title:"JOBS",
+          title:"MAPS",
           headerRight: () => (
             <TouchableOpacity
               style={{ backgroundColor: COLORS.dark,padding:8,borderRadius:10 }}
@@ -54,11 +72,25 @@ const Jobs = () => {
             padding: SIZES.medium,
           }}
         >
-          <Popularjobs />
+         <TouchableOpacity
+  style={{
+    backgroundColor: "#FF6171",
+    padding: 16,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }}
+  onPress={() => {
+    // handle button press
+  }}
+>
+  <Text style={{ color: "#fff", fontSize: 18 }}>Finish walk</Text>
+</TouchableOpacity>
+
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default Jobs;
+export default Map;

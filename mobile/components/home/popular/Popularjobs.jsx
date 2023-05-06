@@ -1,38 +1,32 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "react-native-vector-icons";
+import SolicitationService from "../../../services/SolicitationService";
 
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 import styles from "./popularjobs.style";
-import { COLORS, SIZES } from "../../../constants";
-import PopularJobCard from "../../common/cards/popular/PopularJobCard";
-import useFetch from "../../../hook/useFetch";
 
 const Popularjobs = () => {
   const router = useRouter();
-  const data = [
-    {
-      fullname: "Adriel",
-    },
-    {
-      fullname: "Lucas neto da silva sauro",
-    },
-  ];
-  const [selectedJob, setSelectedJob] = useState();
+  const [solicitations, setSolicitations] = useState([]);
 
- 
-  const handleCardPress = (item) => {
-    router.push(`/job-details/${item.job_id}`);
-    setSelectedJob(item.job_id);
-  };
+  useEffect(() => {
+    try {
+      SolicitationService.getAll().then((res)=> {
+      setSolicitations(res.data);
+      })
+      
+    } catch (error) {
+      console.log("error..." ,error);
+    }
+  }, []);
 
+  useEffect(() => {
+    console.log(solicitations);
+  }, []);
+
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -51,7 +45,7 @@ const Popularjobs = () => {
       </View>
 
       <View style={{ display: "flex", flex: 1, marginTop: 32 }}>
-        {data.map((item, index) => (
+        {solicitations.map((item, index) => (
           <View key={index} style={styles.cardJob}>
             <Text style={styles.solicitationTitle}>{item.fullname}</Text>
 
@@ -63,6 +57,15 @@ const Popularjobs = () => {
                   borderRadius: 4,
                   marginBottom: 5,
                 }}
+                onPress={() => {
+                    // SolicitationService.reply(item._id,0).then(()=> {
+                    //   alert("Accepted to share location successfully");
+                    // },(err)=> {
+                    //   alert(err.response.data.message);
+                    // });
+                    router.push(`/map`);
+                  
+                }}
               >
                 <Text>Accept</Text>
               </TouchableOpacity>
@@ -72,6 +75,14 @@ const Popularjobs = () => {
                   padding: 8,
                   borderRadius: 4,
                   marginTop: 5,
+                }}
+                onPress={() => {
+               
+                  SolicitationService.reply(item._id,0).then(()=> {
+                    alert("Refused to share location successfully");
+                  },(err)=> {
+                  console.log(err);
+                  })
                 }}
               >
                 <Text>Decline</Text>
