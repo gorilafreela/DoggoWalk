@@ -1,14 +1,22 @@
-import { useState } from "react";
-import { SafeAreaView, ScrollView, View,Text } from "react-native";
+import { useState, useEffect } from "react";
+import { SafeAreaView, ScrollView, View, TouchableOpacity,Text } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images, SIZES } from "../constants";
-import UserService from "../services/UserService";
-import StorageService from "../services/StorageService";
+import {clearSession} from "../services/StorageService";
+import { getData } from "../services/StorageService";
 import { ScreenHeaderBtn, Popularjobs } from "../components";
-
+import { MaterialIcons } from "react-native-vector-icons";
 const Jobs = () => {
   const router = useRouter();
-
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await getData("token");
+      if (!token) {
+        router.push(`/home`);
+      }
+    };
+    checkToken();
+  }, [router]);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.dark }}>
       <Stack.Screen
@@ -18,8 +26,20 @@ const Jobs = () => {
           headerLeft: () => (
             <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
           ),
-
-          headerTitle: "",
+          title:"JOBS",
+          headerRight: () => (
+            <TouchableOpacity
+              style={{ backgroundColor: COLORS.dark,padding:8,borderRadius:10 }}
+              onPress={() => {
+                clearSession().then(()=> {
+                  alert("You have logout successfully")
+                  router.push(`/home`);
+                })
+              }}
+            >
+              <Text style={{ color: "#fff" }}>Logout</Text>
+            </TouchableOpacity>
+          ),
         }}
       />
 
@@ -30,16 +50,7 @@ const Jobs = () => {
             padding: SIZES.medium,
           }}
         >
-          <Text style={{ color: "#FFFFFF" }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
-            mollitia, molestiae quas vel sint commodi repudiandae consequuntur
-            voluptatum laborum numquam blanditiis harum quisquam eius sed odit
-            fugiat iusto fuga praesentium optio, eaque rerum! Provident
-            similique accusantium nemo autem. Veritatis obcaecati tenetur iure
-            eius earum ut molestias architecto voluptate aliquam nihil, eveniet
-            aliquid culpa officia aut! Impedit sit sunt quaerat, odit, tenetur
-            error, harum nesciunt ipsum debitis quas aliquid.
-          </Text>
+          <Popularjobs />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -19,4 +19,13 @@ async function getData(key) {
   }
 }
 
-export { getData, storeData };
+async function clearSession() {
+  try {
+    await AsyncStorage.clear();
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+
+export { getData, storeData,clearSession };

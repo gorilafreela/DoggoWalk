@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import { useState,useEffect } from "react";
+import { SafeAreaView,Text, ScrollView, View } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images, SIZES } from "../constants";
 import UserService from "../services/UserService";
-import StorageService from "../services/StorageService";
+import { getData,storeData } from "../services/StorageService";
 import {
   ScreenHeaderBtn,
   Welcome,
@@ -13,7 +13,17 @@ const Home = () => {
   const router = useRouter()
   const [emailValue, setEmailValue] = useState("");
   const [PasswordValue, setPasswordValue] = useState("");
-
+  useEffect(() => {
+    const checkToken = async () => {
+      console.log("Checking token...");
+      const token = await getData("token");
+      alert("Token: " + token)
+      if (token) {
+        router.push(`/jobs`);
+      }
+    };
+    checkToken();
+  }, [router]);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.dark }}>
       <Stack.Screen
@@ -23,7 +33,7 @@ const Home = () => {
           headerLeft: () => (
             <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%' />
           ),
-          
+       
           headerTitle: "",
         }}
       />
@@ -42,7 +52,8 @@ const Home = () => {
             setPasswordValue={setPasswordValue}
             handleClick={() => {
               UserService.login(emailValue,PasswordValue).then((res)=> {
-                
+               storeData('token',res.data.token);
+
                 alert('You have logged in successfully')
                 router.push(`/jobs`)
               },(err)=> {

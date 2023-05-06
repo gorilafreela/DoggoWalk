@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
+import { MaterialIcons } from "react-native-vector-icons";
+
 import {
   View,
   Text,
@@ -15,13 +17,17 @@ import useFetch from "../../../hook/useFetch";
 
 const Popularjobs = () => {
   const router = useRouter();
-  const { data, isLoading, error } = useFetch("search", {
-    query: "React developer",
-    num_pages: "1",
-  });
-
+  const data = [
+    {
+      fullname: "Adriel",
+    },
+    {
+      fullname: "Lucas neto da silva sauro",
+    },
+  ];
   const [selectedJob, setSelectedJob] = useState();
 
+ 
   const handleCardPress = (item) => {
     router.push(`/job-details/${item.job_id}`);
     setSelectedJob(item.job_id);
@@ -30,32 +36,49 @@ const Popularjobs = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Popular jobs</Text>
-        <TouchableOpacity>
-          <Text style={styles.headerBtn}>Show all</Text>
+        <Text style={styles.headerTitle}>Solicitations</Text>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#fff",
+            padding: 8,
+            borderRadius: 4,
+            margin: 4,
+          }}
+          onPress={() => window.location.reload()}
+        >
+          <MaterialIcons name="refresh" size={30} color="#1d1f23" />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.cardsContainer}>
-        {isLoading ? (
-          <ActivityIndicator size='large' color={COLORS.primary} />
-        ) : error ? (
-          <Text>Something went wrong</Text>
-        ) : (
-          <FlatList
-            data={data}
-            renderItem={({ item }) => (
-              <PopularJobCard
-                item={item}
-                selectedJob={selectedJob}
-                handleCardPress={handleCardPress}
-              />
-            )}
-            keyExtractor={(item) => item.job_id}
-            contentContainerStyle={{ columnGap: SIZES.medium }}
-            horizontal
-          />
-        )}
+      <View style={{ display: "flex", flex: 1, marginTop: 32 }}>
+        {data.map((item, index) => (
+          <View key={index} style={styles.cardJob}>
+            <Text style={styles.solicitationTitle}>{item.fullname}</Text>
+
+            <View>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#24E5AF",
+                  padding: 8,
+                  borderRadius: 4,
+                  marginBottom: 5,
+                }}
+              >
+                <Text>Accept</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#FF6171",
+                  padding: 8,
+                  borderRadius: 4,
+                  marginTop: 5,
+                }}
+              >
+                <Text>Decline</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))}
       </View>
     </View>
   );

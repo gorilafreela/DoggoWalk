@@ -5,6 +5,7 @@ import { FONT, SIZES, COLORS } from "../../../constants";
 const styles = StyleSheet.create({
   container: {
     marginTop: SIZES.xLarge,
+    flex: 1,
   },
   header: {
     flexDirection: "row",
@@ -14,7 +15,13 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: SIZES.large,
     fontFamily: FONT.medium,
-    color: COLORS.primary,
+    color: COLORS.white,
+  },
+  solicitationTitle: {
+    fontSize: SIZES.medium,
+    fontFamily: FONT.medium,
+    color: COLORS.dark,
+    alignSelf: "flex-start",
   },
   headerBtn: {
     fontSize: SIZES.medium,
@@ -22,8 +29,23 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
   },
   cardsContainer: {
-    marginTop: SIZES.medium,
+    marginTop: 45,
+    
   },
+
+  cardJob: {
+    backgroundColor: COLORS.white,
+    borderRadius: SIZES.large,
+    padding: SIZES.xLarge,
+    marginVertical: SIZES.medium,
+    marginHorizontal: SIZES.small,
+    display: "flex",
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexWrap:"wrap"
+  }
 });
 
 export default styles;
