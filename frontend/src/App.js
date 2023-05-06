@@ -42,7 +42,7 @@ const App = () => {
           <AppRoute exact path="/desktop" component={Desktop} layout={LayoutDefault} />
           <AppRoute exact path="/complete-profile" component={CompleteProfile} layout={LayoutDefault} />
           <AppRoute exact path="/mobile" component={Mobile} layout={LayoutDefault} />
-          <AppRoute exact path="/map" component={MapTracking} layout={LayoutDefault} />
+          <AppRoute exact path="/map/:id" component={MapTracking} layout={LayoutDefault} />
         </Switch>
       )} />
   );

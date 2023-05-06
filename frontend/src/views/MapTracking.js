@@ -3,15 +3,16 @@ import classNames from "classnames";
 import { SectionTilesProps } from "../utils/SectionProps";
 import SectionHeader from "../components/sections/partials/SectionHeader";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import markerIcon from '../assets/images/logo-icon.png';
-import L from 'leaflet';
-
+import { useParams,useHistory } from "react-router-dom";
+import markerIcon from "../assets/images/logo-icon.png";
+import L from "leaflet";
+import SolicitationService from "../services/SolicitationService";
 const myIcon = L.icon({
-    iconUrl: markerIcon,
-    iconSize: [23, 23],
-    iconAnchor: [19, 38],
-    popupAnchor: [0, -30],
-  });
+  iconUrl: markerIcon,
+  iconSize: [23, 23],
+  iconAnchor: [19, 38],
+  popupAnchor: [0, -30],
+});
 
 const propTypes = {
   ...SectionTilesProps.types,
@@ -31,6 +32,31 @@ const MapTracking = ({
   invertColor,
   ...props
 }) => {
+  const { id } = useParams(); // Get the id parameter from the URL
+  const history = useHistory();
+  const [solicitation, setSolicitation] = useState({});
+  // Use the id to make a request to get the status
+  useEffect(() => {
+    const getStatus = async () => {
+      SolicitationService.checkStatus(id).then(
+        (res) => {
+          setSolicitation(res.data)
+          if(!res.data.accepted || !res.data.active ) {
+            alert("Solicitation not found or not avaiable location");
+            history.push("/desktop");
+          }
+        },
+        (err) => {
+          alert(err.response.data.message);
+        }
+      );
+    };
+
+    getStatus();
+  }, [id]);
+
+
+
   const outerClasses = classNames(
     "features-tiles section",
     topOuterDivider && "has-top-divider",
@@ -48,7 +74,7 @@ const MapTracking = ({
 
   const sectionHeader = {
     title: "Live DoggoWalk",
-    paragraph: "John is now in a walk with our pet",
+    paragraph: `Your pet in real time`,
   };
 
   const [position, setPosition] = useState([51.505, -0.09]);
@@ -76,11 +102,7 @@ const MapTracking = ({
             className="center-content"
           />
           <div>
-            <MapContainer
-              center={position}
-              zoom={14}
-              scrollWheelZoom={false}
-            >
+            <MapContainer center={position} zoom={14} scrollWheelZoom={false}>
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

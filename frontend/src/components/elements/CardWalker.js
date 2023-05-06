@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../css/cardWalker.css";
 import SolicitationService from "../../services/SolicitationService";
-
+import { useHistory } from "react-router-dom";
 const CardWalker = ({
   name,
   price,
@@ -17,6 +17,8 @@ const CardWalker = ({
   const [isActive, setIsActive] = useState(false);
   const [isSharingLocation, setIsSharingLocation] = useState(false);
   const [solId, setSolId] = useState(solicitationId);
+  const history = useHistory();
+
 
   useEffect(() => {
     if (isAccepted && isActive) {
@@ -48,6 +50,12 @@ const CardWalker = ({
     } catch (err) {
       alert(err.response.data.message);
     }
+  };
+
+  const handleButtonClick = () => {
+    // Replace "solId" with the actual ID you want to pass to the URL
+    const url = `/map/${solId}`;
+    history.push(url);
   };
 
   useEffect(() => {
@@ -111,7 +119,7 @@ const CardWalker = ({
           <button
             className="button button-sm"
             style={{ marginLeft: 8, background: "#24E5AF", color: "#fff" }}
-            onClick={handleCancelClick}
+            onClick={handleButtonClick}
           >
             See live location
           </button>
