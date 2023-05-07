@@ -2,6 +2,8 @@ const WebSocket = require("ws");
 const clients = {};
 const conversations = {};
 const solicitationRepository = require("../repositories/solicitationRepository");
+const validLocation =  /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)[, ]+[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/
+
 
 const locationSocket = (server) => {
   const wss = new WebSocket.Server({ server, path: "/" });
@@ -44,13 +46,20 @@ const locationSocket = (server) => {
 
     // Listen for messages from the client
     socket.on("message", (message) => {
-      console.log(`${clientId} said: ${message}`);
+     
 
       // Broadcast the message to all clients in the same conversation
       conversations[solicitationId].forEach((client) => {
         if (clients[client].socket !== socket) {
-          clients[client].socket.send(`${clientId} said: ${message}`);
+
+          if(validLocation.test(message)) {
+            clients[client].socket.send(`${message}`);
+          } else {
+            console.log("invalid location")
+          }
+       
         }
+
       });
     });
 

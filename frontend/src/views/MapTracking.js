@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { SectionTilesProps } from "../utils/SectionProps";
 import SectionHeader from "../components/sections/partials/SectionHeader";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { useParams,useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import markerIcon from "../assets/images/logo-icon.png";
 import L from "leaflet";
 import SolicitationService from "../services/SolicitationService";
@@ -35,19 +35,22 @@ const MapTracking = ({
   const { id } = useParams(); // Get the id parameter from the URL
   const history = useHistory();
   const [solicitation, setSolicitation] = useState({});
+  const [position, setPosition] = useState([51.505, -0.09]);
   // Use the id to make a request to get the status
   useEffect(() => {
     const getStatus = async () => {
       SolicitationService.checkStatus(id).then(
         (res) => {
-          setSolicitation(res.data)
-          if(!res.data.accepted || !res.data.active ) {
-            alert("Solicitation not found or not avaiable location");
-            history.push("/desktop");
+          setSolicitation(res.data);
+          if (!res.data.accepted || !res.data.active) {
+            alert("Not avaiable location");
+            history.push("/");
+            return;
           }
         },
         (err) => {
           alert(err.response.data.message);
+          history.push("/");
         }
       );
     };
@@ -55,7 +58,40 @@ const MapTracking = ({
     getStatus();
   }, [id]);
 
+  useEffect(() => {
+    if (solicitation) {
+      const socket = new WebSocket(`ws://localhost:5001?solicitationId=${id}`);
+      socket.onopen = () => {
+        console.log("WebSocket connected");
+      };
 
+      socket.onmessage = (event) => {
+        console.log(`WebSocket message received: ${event.data}`);
+      
+        const message = event.data;
+        const coordinates = message.split(" ");
+        console.log(coordinates);
+        if (coordinates.length === 2) {
+          const lat = parseFloat(coordinates[0]);
+          const lng = parseFloat(coordinates[1]);
+        
+          if (!isNaN(lat) && !isNaN(lng)) {
+          
+            setPosition([lat, lng]);
+          }
+        }
+      };
+
+      socket.onclose = () => {
+        console.log("WebSocket disconnected");
+      };
+
+      return () => {
+        console.log("WebSocket closing");
+        socket.close();
+      };
+    }
+  }, []);
 
   const outerClasses = classNames(
     "features-tiles section",
@@ -77,20 +113,8 @@ const MapTracking = ({
     paragraph: `Your pet in real time`,
   };
 
-  const [position, setPosition] = useState([51.505, -0.09]);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      // Update the position by adding a small random amount to the current position
-      setPosition([
-        position[0] + (Math.random() - 0.5) * 0.001,
-        position[1] + (Math.random() - 0.5) * 0.001,
-      ]);
-    }, 250);
 
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, [position]);
 
   return (
     <section className={outerClasses}>
