@@ -7,37 +7,42 @@ const locationSocket = (server) => {
   const wss = new WebSocket.Server({ server, path: '/' });
 
   wss.on('connection', (socket, req) => {
-    console.log('A new client connected!');
-
+  
     // Parse the query parameters
     const queryParams = new URLSearchParams(req.url.split('?')[1]);
-    const clientId = queryParams.get('clientId');
+    const conversationId = queryParams.get('conversationId');
 
-    // Validate the clientId
-    if (!clientId) {
-      socket.send('clientId parameter is missing');
-      socket.close();
-      return;
-    }
+    // Generate a unique client ID based on the timestamp
+    const clientId = Date.now().toString();
 
-    if (clients[clientId]) {
-      socket.send('clientId is already in use');
+    // Validate the conversation ID
+    if (!conversationId) {
+      socket.send('conversationId parameter is missing');
       socket.close();
       return;
     }
 
     // Store the client by its ID
-    clients[clientId] = socket;
+    clients[clientId] = { socket, conversationId };
+
+    // Add the client to the conversation
+    if (!conversations[conversationId]) {
+      conversations[conversationId] = [clientId];
+    } else {
+      conversations[conversationId].push(clientId);
+    }
 
     // Send a welcome message to the new client
-    socket.send(`Welcome to the server ${clientId}!`);
+    socket.send(`Welcome to the conversation ${conversationId}, your client ID is ${clientId}`);
 
     // Listen for messages from the client
     socket.on('message', (message) => {
       console.log(`${clientId} said: ${message}`);
-      Object.values(clients).forEach((client) => {
-        if (client !== socket) {
-          client.send(`${clientId} said: ${message}`);
+
+      // Broadcast the message to all clients in the same conversation
+      conversations[conversationId].forEach((client) => {
+        if (clients[client].socket !== socket) {
+          clients[client].socket.send(`${clientId} said: ${message}`);
         }
       });
     });
@@ -45,6 +50,13 @@ const locationSocket = (server) => {
     // Listen for socket close events
     socket.on('close', () => {
       console.log('A client disconnected');
+
+      // Remove the client from the conversation
+      const index = conversations[conversationId].indexOf(clientId);
+      if (index > -1) {
+        conversations[conversationId].splice(index, 1);
+      }
+
       delete clients[clientId];
     });
   });
