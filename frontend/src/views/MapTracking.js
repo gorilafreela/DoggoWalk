@@ -7,6 +7,7 @@ import { useParams, useHistory } from "react-router-dom";
 import markerIcon from "../assets/images/logo-icon.png";
 import L from "leaflet";
 import SolicitationService from "../services/SolicitationService";
+import { FaSpinner } from "react-icons/fa";
 const myIcon = L.icon({
   iconUrl: markerIcon,
   iconSize: [23, 23],
@@ -35,7 +36,7 @@ const MapTracking = ({
   const { id } = useParams(); // Get the id parameter from the URL
   const history = useHistory();
   const [solicitation, setSolicitation] = useState({});
-  const [position, setPosition] = useState([51.505, -0.09]);
+  const [position, setPosition] = useState([]);
   // Use the id to make a request to get the status
   useEffect(() => {
     const getStatus = async () => {
@@ -58,6 +59,11 @@ const MapTracking = ({
     getStatus();
   }, [id]);
 
+  // useEffect(() => {
+  //   const map = document.querySelector(".leaflet-container");
+  //   map.scrollIntoView({ behavior: "smooth" });
+  // }, [position]);
+
   useEffect(() => {
     if (solicitation) {
       const socket = new WebSocket(`ws://localhost:5001?solicitationId=${id}`);
@@ -67,17 +73,18 @@ const MapTracking = ({
 
       socket.onmessage = (event) => {
         console.log(`WebSocket message received: ${event.data}`);
-      
+
         const message = event.data;
         const coordinates = message.split(" ");
         console.log(coordinates);
         if (coordinates.length === 2) {
           const lat = parseFloat(coordinates[0]);
           const lng = parseFloat(coordinates[1]);
-        
+
           if (!isNaN(lat) && !isNaN(lng)) {
-          
             setPosition([lat, lng]);
+          } else {
+            setPosition(null); // or setPosition([]) if you prefer an empty array
           }
         }
       };
@@ -113,9 +120,6 @@ const MapTracking = ({
     paragraph: `Your pet in real time`,
   };
 
-
-
-
   return (
     <section className={outerClasses}>
       <div className="container">
@@ -126,17 +130,37 @@ const MapTracking = ({
             className="center-content"
           />
           <div>
-            <MapContainer center={position} zoom={14} scrollWheelZoom={false}>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={position} icon={myIcon}>
-                <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-              </Marker>
-            </MapContainer>
+            {position && position.length === 2 ? (
+              <MapContainer center={position} zoom={14} scrollWheelZoom={false}>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={position} icon={myIcon}>
+                  <Popup>
+                    A pretty CSS3 popup. <br /> Easily customizable.
+                  </Popup>
+                </Marker>
+              </MapContainer>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  opacity: "0.4",
+                }}
+              >
+                <div
+                  style={{
+                    animation: "spin 1s linear infinite",
+                    marginRight: 16,
+                  }}
+                >
+                  <FaSpinner size={24} />
+                </div>
+                Loading map...
+              </div>
+            )}
           </div>
         </div>
       </div>
