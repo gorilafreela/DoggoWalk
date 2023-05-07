@@ -28,7 +28,7 @@ const locationSocket = (server) => {
 
     let conversation = await findConversationById(solicitationId);
     if (!conversation) {
-      socket.send("Invalid Id");
+      socket.send(`Invalid Id: ${solicitationId}`);
       socket.close();
       return;
     }
@@ -46,12 +46,12 @@ const locationSocket = (server) => {
 
     // Listen for messages from the client
     socket.on("message", (message) => {
-     
+      console.log(message);
 
       // Broadcast the message to all clients in the same conversation
       conversations[solicitationId].forEach((client) => {
         if (clients[client].socket !== socket) {
-
+        
           if(validLocation.test(message)) {
             clients[client].socket.send(`${message}`);
           } else {

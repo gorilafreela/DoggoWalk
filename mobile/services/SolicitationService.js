@@ -27,4 +27,16 @@ export default class SolicitationService {
       },
     });
   }
+
+
+  static async checkStatus(id) {
+    const token = await getData("token");
+    return axios({
+      url: "http://192.168.3.33:5000/solicitation/get-book/" +id,
+      method: "GET",
+      headers: {
+        Authorization: token,
+      }
+    });
+  }
 }

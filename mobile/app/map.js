@@ -16,26 +16,21 @@ import MapView, { Marker } from "react-native-maps";
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import SolicitationService from "../services/SolicitationService";
-import io from 'socket.io-client';
-const Map = () => {
+
+const Map = ({id}) => {
   const router = useRouter();
   const [userLocation, setUserLocation] = useState({});
-  const [socket, setSocket] = useState({});
+  const [socket, setSocket] = useState(null);
   const route = useRoute();
-  const Map = ({ route,id }) => {
- 
-    const navigation = useNavigation();
+  const ip = '192.168.3.33'
+  const navigation = useNavigation();
 
-    const handleMapPress = (id) => {
-      navigation.navigate('map-details', { id });
-      alert(id)
-     
-    }
-    return (
-      <Text>Map component for id {id}</Text>
-    );
-  };
-  
+  const handleMapPress = (id) => {
+    navigation.navigate('map-details', { id });
+   
+  }
+
+ 
  
   useEffect(() => {
     (async () => {
@@ -47,26 +42,61 @@ const Map = () => {
       }
       const loc = await Location.getCurrentPositionAsync();
       setUserLocation(loc);
-      const newSocket = io('ws://192.168.3.33:5000');
-      newSocket.on("connect", () => {
-        console.log("Connected to server");
-  
-        newSocket.emit("location", { latitude: loc.coords.latitude, longitude: loc.coords.longitude });
-      });
-      newSocket.on("error", (err) => {
-        console.log("Socket connection error:", err);
-      });
-      setSocket(newSocket);
+      
     })();
   }, []);
+
+
+  useEffect(() => {
+    // create a new WebSocket object
+    const newSocket = new WebSocket(
+      `ws://${ip}:5001?solicitationId=${route.params.id}`
+    );
   
+    // set the socket state to the new WebSocket object
+    setSocket(newSocket);
+  
+    // handle WebSocket events
+    newSocket.onopen = () => {
+      alert("WebSocket connected");
+    };
+  
+    newSocket.onmessage = (event) => {
+      console.log("WebSocket message received: ", event.data);
+    };
+  
+    newSocket.onclose = () => {
+      console.log("WebSocket disconnected");
+    };
+  
+    newSocket.onerror = (error) => {
+      console.log("WebSocket error: ", error);
+    };
+  
+    // cleanup function to close the WebSocket connection when the component unmounts
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
+  }, [id]);
+  const updateLocation = async () => {
+    const loc = await Location.getCurrentPositionAsync();
+    setUserLocation(loc);
+
+    console.log(`${loc.coords.latitude} ${loc.coords.longitude}`) // Here is 
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(`${loc.coords.latitude} ${loc.coords.longitude}`);
+    }
+
+  };
 
   useEffect(() => {
     const checkToken = async () => {
       const token = await getData("token");
 
       if (!token) {
-        router.push(`/home`);
+        router.push(`/`);
       }
     };
     checkToken();
@@ -82,10 +112,7 @@ const Map = () => {
 
   
 
-  const updateLocation = async () => {
-    const loc = await Location.getCurrentPositionAsync();
-    setUserLocation(loc);
-  };
+ 
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.dark }}>
