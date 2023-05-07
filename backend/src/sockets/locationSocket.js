@@ -30,7 +30,6 @@ const locationSocket = (server) => {
       socket.close();
       return;
     }
-
     // Add the client to the conversation
     if (!conversations[solicitationId]) {
       conversations[solicitationId] = [clientId];
