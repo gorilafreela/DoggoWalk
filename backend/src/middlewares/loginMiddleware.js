@@ -13,11 +13,19 @@ const PUBLIC_URLS = [
   /\/user\/register/g,
   /\/user\/get-all/g,
   /\/user\/today/g,
-  
+
 ];
 
+//if is ws protocol next() return
+
 function action(req, res, next) {
- 
+  if (req.headers.upgrade && req.headers.upgrade.toLowerCase() === 'websocket') {
+    // This is a WebSocket connection, allow it
+    next();
+    return;
+  }
+
+
   let url = routeUtil.removeLastUrlSlash(req.url);
   for (let i = 0; i < PUBLIC_URLS.length; i++) {
     let publicUrlRegex = PUBLIC_URLS[i];

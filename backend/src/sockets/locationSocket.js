@@ -1,20 +1,24 @@
-const socketIO = require("socket.io");
+const WebSocket = require('ws');
 
-const location = (server) => {
-  const io = socketIO(server);
+const locationSocket = (server) => {
+  const wss = new WebSocket.Server({ server, path: '/' });
 
-  io.on("connection", (socket) => {
-    console.log("A user connected to location socket");
-    // Listen to the 'location' event
-    socket.on("location", (data) => {
-      console.log(`Received location data: ${data}`);
-      // Do something with the location data
+  wss.on('connection', (socket) => {
+    console.log('A new client connected!');
+
+    // Send a welcome message to the new client
+    socket.send('Welcome to the server!');
+
+    // Listen for messages from the client
+    socket.on('message', (message) => {
+      console.log(`Received message: ${message}`);
     });
 
-    socket.on("disconnect", () => {
-      console.log("A user disconnected from location socket");
+    // Listen for socket close events
+    socket.on('close', () => {
+      console.log('A client disconnected');
     });
   });
 };
 
-module.exports = { location };
+module.exports = { locationSocket };

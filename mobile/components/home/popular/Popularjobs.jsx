@@ -15,7 +15,7 @@ const Popularjobs = () => {
     try {
       SolicitationService.getAll().then((res)=> {
         const solicitations = res.data;
-
+        console.log(solicitations)
         for (let i = 0; i < solicitations.length; i++) {
           if(solicitations[i].active && solicitations[i].accepted) {
             navigation.navigate('map', { id: solicitations[i]._id });

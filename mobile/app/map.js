@@ -16,9 +16,11 @@ import MapView, { Marker } from "react-native-maps";
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import SolicitationService from "../services/SolicitationService";
+import io from 'socket.io-client';
 const Map = () => {
   const router = useRouter();
   const [userLocation, setUserLocation] = useState({});
+  const [socket, setSocket] = useState({});
   const route = useRoute();
   const Map = ({ route,id }) => {
  
@@ -45,8 +47,19 @@ const Map = () => {
       }
       const loc = await Location.getCurrentPositionAsync();
       setUserLocation(loc);
+      const newSocket = io('ws://192.168.3.33:5000');
+      newSocket.on("connect", () => {
+        console.log("Connected to server");
+  
+        newSocket.emit("location", { latitude: loc.coords.latitude, longitude: loc.coords.longitude });
+      });
+      newSocket.on("error", (err) => {
+        console.log("Socket connection error:", err);
+      });
+      setSocket(newSocket);
     })();
   }, []);
+  
 
   useEffect(() => {
     const checkToken = async () => {
@@ -67,10 +80,11 @@ const Map = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  
+
   const updateLocation = async () => {
     const loc = await Location.getCurrentPositionAsync();
     setUserLocation(loc);
-    console.log(loc);
   };
 
   return (
