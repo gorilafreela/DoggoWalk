@@ -1,46 +1,54 @@
-const WebSocket = require('ws');
-
+const WebSocket = require("ws");
 const clients = {};
 const conversations = {};
+const solicitationRepository = require("../repositories/solicitationRepository");
 
 const locationSocket = (server) => {
-  const wss = new WebSocket.Server({ server, path: '/' });
+  const wss = new WebSocket.Server({ server, path: "/" });
 
-  wss.on('connection', (socket, req) => {
-  
+  wss.on("connection", async (socket, req) => {
     // Parse the query parameters
-    const queryParams = new URLSearchParams(req.url.split('?')[1]);
-    const conversationId = queryParams.get('conversationId');
+    const queryParams = new URLSearchParams(req.url.split("?")[1]);
+    const solicitationId = queryParams.get("solicitationId");
 
     // Generate a unique client ID based on the timestamp
     const clientId = Date.now().toString();
 
     // Validate the conversation ID
-    if (!conversationId) {
-      socket.send('conversationId parameter is missing');
+    if (!solicitationId) {
+      socket.send("solicitationId parameter is missing");
       socket.close();
       return;
     }
 
     // Store the client by its ID
-    clients[clientId] = { socket, conversationId };
+    clients[clientId] = { socket, solicitationId };
+
+    let conversation = await findConversationById(solicitationId);
+    if (!conversation) {
+      socket.send("Invalid Id");
+      socket.close();
+      return;
+    }
 
     // Add the client to the conversation
-    if (!conversations[conversationId]) {
-      conversations[conversationId] = [clientId];
+    if (!conversations[solicitationId]) {
+      conversations[solicitationId] = [clientId];
     } else {
-      conversations[conversationId].push(clientId);
+      conversations[solicitationId].push(clientId);
     }
 
     // Send a welcome message to the new client
-    socket.send(`Welcome to the conversation ${conversationId}, your client ID is ${clientId}`);
+    socket.send(
+      `Welcome to the conversation ${solicitationId}, your client ID is ${clientId}`
+    );
 
     // Listen for messages from the client
-    socket.on('message', (message) => {
+    socket.on("message", (message) => {
       console.log(`${clientId} said: ${message}`);
 
       // Broadcast the message to all clients in the same conversation
-      conversations[conversationId].forEach((client) => {
+      conversations[solicitationId].forEach((client) => {
         if (clients[client].socket !== socket) {
           clients[client].socket.send(`${clientId} said: ${message}`);
         }
@@ -48,18 +56,27 @@ const locationSocket = (server) => {
     });
 
     // Listen for socket close events
-    socket.on('close', () => {
-      console.log('A client disconnected');
+    socket.on("close", () => {
+      console.log("A client disconnected");
 
       // Remove the client from the conversation
-      const index = conversations[conversationId].indexOf(clientId);
+      const index = conversations[solicitationId].indexOf(clientId);
       if (index > -1) {
-        conversations[conversationId].splice(index, 1);
+        conversations[solicitationId].splice(index, 1);
       }
 
       delete clients[clientId];
     });
   });
+};
+
+const findConversationById = async (solicitationId) => {
+  try {
+    const conversation = await solicitationRepository.realTimeSolicitationById(solicitationId);
+    return conversation;
+  } catch {
+    return null;
+  }
 };
 
 module.exports = { locationSocket };

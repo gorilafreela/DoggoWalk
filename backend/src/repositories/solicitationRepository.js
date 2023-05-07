@@ -23,6 +23,10 @@ async function addDocument(from, to) {
     console.log(err);
   }
 }
+
+
+addDocument('645342d7151e89268cfb8ae5','645343b837ac153298aff67e')
+
 async function updateById(id, data) {
   await Solicitation.findByIdAndUpdate(id, data);
   return await Solicitation.findById(id);
@@ -57,6 +61,12 @@ async function findById(id) {
   return await Solicitation.findOne({ _id: id });
 }
 
+
+async function realTimeSolicitationById(id) {
+  return await Solicitation.findOne({ _id: id , active:1, accepted:1 });
+}
+
+
 async function hasPendingSolicitation(from, to) {
   const solicitation = await Solicitation.find({
     from: from,
@@ -86,5 +96,6 @@ module.exports = {
   getAllAwaiting,
   hasPendingSolicitation,
   cancel,
-  getAllProgress
+  getAllProgress,
+  realTimeSolicitationById
 };
