@@ -1,8 +1,8 @@
 # DoggoWalk
 
-React.js website: http://52.7.196.103
+**React.js website:** http://52.7.196.103
 
-APK mobile:
+**APK mobile:**
 
 Doggowalk is a cutting-edge solution for pet owners and dog walkers alike. With the power of mobile live tracking, our app makes it easy to keep an eye on your furry friend's walks, no matter where they are.
 
