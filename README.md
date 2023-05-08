@@ -92,6 +92,34 @@ Solicitations:
 
 [Front-end folder](/frontend/)
 
+Install dependencies:
 
+```npm install```
 
+Build for production:
 
+```npm run build```
+
+## node.js
+
+[Back-end folder](/backend/)
+
+Install dependencies:
+
+```npm install```
+
+Start Server:
+
+```npm start```
+
+## node.js
+
+[Back-end folder](/backend/)
+
+Install dependencies:
+
+```npm install```
+
+Start using Expo:
+
+```npx expo start --clear```
