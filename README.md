@@ -104,6 +104,13 @@ Solicitations:
   
   - A walker: visits the DoggoWalk website and signs up for an account. They provide their name, email, password, picture and description to create an account. After complete their profile they will need to install the mobile app for accept and share location to pet's owener
 
+### Jest Testing
+
+Jest is a popular JavaScript testing framework that enables automated testing of Node.js applications. By using Jest to write automated tests for CRUD operations in user and solicitation services, developers can ensure that their application is functioning as intended.
+
+In addition, developers can set up a second database in MongoDB specifically for testing purposes. This allows for isolated and consistent testing of the application without interfering with the main database.
+
+Furthermore, developers can use Jest to write end-to-end tests that simulate the full flow of the application. This can include testing the user interface, database integration, and API endpoints. End-to-end tests provide a more complete picture of the application's performance and help identify any issues that may arise in real-world usage.
 
 ## React.js
 
