@@ -100,6 +100,7 @@ const MapTracking = ({
     }
   }, []);
 
+
   const outerClasses = classNames(
     "features-tiles section",
     topOuterDivider && "has-top-divider",
@@ -158,7 +159,7 @@ const MapTracking = ({
                 >
                   <FaSpinner size={24} />
                 </div>
-                Loading map...
+                Waiting for john start share location...
               </div>
             )}
           </div>

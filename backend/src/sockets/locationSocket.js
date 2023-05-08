@@ -46,8 +46,6 @@ const locationSocket = (server) => {
 
     // Listen for messages from the client
     socket.on("message", (message) => {
-      console.log(message);
-
       // Broadcast the message to all clients in the same conversation
       conversations[solicitationId].forEach((client) => {
         if (clients[client].socket !== socket) {
@@ -65,7 +63,7 @@ const locationSocket = (server) => {
 
     // Listen for socket close events
     socket.on("close", () => {
-      console.log("A client disconnected");
+    console.log("A client disconnected");
 
       // Remove the client from the conversation
       const index = conversations[solicitationId].indexOf(clientId);

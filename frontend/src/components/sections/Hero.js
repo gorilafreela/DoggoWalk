@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import classNames from "classnames";
 import { SectionProps } from "../../utils/SectionProps";
 import ButtonGroup from "../elements/ButtonGroup";
-import Button from "../elements/Button";
 import Image from "../elements/Image";
-import { Link } from "react-router-dom";
-
+import { Link } from 'react-scroll';
 const propTypes = {
   ...SectionProps.types,
 };
@@ -22,6 +20,7 @@ const Hero = ({
   bottomDivider,
   hasBgColor,
   invertColor,
+  onSignUpButtonClick,
   ...props
 }) => {
   const outerClasses = classNames(
@@ -65,17 +64,16 @@ const Hero = ({
               <div className="reveal-from-bottom" data-reveal-delay="600">
                 <ButtonGroup>
                   <Link
-                    to="/login"
+                    style={{width: 250,borderRadius:32}}
                     className="button button-white button-wide-mobile button-sm"
+                    to="login"
+                    smooth={true}
+                    offset={-70}
+                    duration={500}
                   >
                     Login
                   </Link>
-                  <Link
-                    to="/signup"
-                    className="button button-primary button-wide-mobile button-sm"
-                  >
-                    Sign up
-                  </Link>
+                  
                 </ButtonGroup>
                 
               </div>

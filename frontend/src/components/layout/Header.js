@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import { Link } from "react-router-dom";
+import { Link } from 'react-scroll';
 import Image from "../elements/Image";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import LocalStorageService from "../../services/LocalStorageService";
 const propTypes = {
   navPosition: PropTypes.string,
@@ -47,9 +47,7 @@ const Header = ({
     }
   }, []);
 
-  useEffect(() => {
-
-  }, [isLoggedIn]);
+  useEffect(() => {}, [isLoggedIn]);
   useEffect(() => {
     isActive && openMenu();
     document.addEventListener("keydown", keyPress);
@@ -69,9 +67,8 @@ const Header = ({
 
   const logout = () => {
     LocalStorageService.killSession();
-    history.push('/');
+    history.push("/");
     window.location.reload();
-
   };
 
   const closeMenu = () => {
@@ -150,53 +147,32 @@ const Header = ({
                         )}
                       >
                         {isLoggedIn ? (
-                          <li>
-                           
-                          </li>
-                          
+                           <li>
+                           <button
+                             style={{
+                               marginLeft: "18px",
+                             }}
+                             onClick={logout}
+                             className="button button-dark button-wide-mobile button-sm"
+                           >
+                             Logout
+                           </button>
+                         </li>
                         ) : (
                           <li>
                             <Link
-                              to="/#login"
-                              className="button button-primary button-wide-mobile button-sm"
+                              className="button button-white button-wide-mobile button-sm"
+                              to="login"
+                              smooth={true}
+                              offset={-70}
+                              duration={500}
                             >
                               Login
                             </Link>
                           </li>
                         )}
                       </ul>
-                      <ul
-                        className={classNames(
-                          "list-reset text-xs",
-                          navPosition && `header-nav-${navPosition}`
-                        )}
-                      >
-                        {isLoggedIn ? (
-                          <li>
-                            <button
-                            style={{ 
-                              
-                              marginLeft: "18px",
-                            
-                            }}
-                              onClick={logout}
-                              className="button button-dark button-wide-mobile button-sm"
-                            >
-                             Logout
-                            </button>
-                          </li>
-                          
-                        ) : (
-                          <li>
-                            <Link
-                              to="/#login"
-                              className="button button-white button-wide-mobile button-sm"
-                            >
-                               Sign in
-                            </Link>
-                          </li>
-                        )}
-                      </ul>
+                  
                     </div>
                   </>
                 )}

@@ -1,7 +1,5 @@
-import React from "react";
-// import sections
-import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import Hero from "../components/sections/Hero";
 import FeaturesTiles from "../components/sections/FeaturesTiles";
 import FeaturesSplit from "../components/sections/FeaturesSplit";
@@ -14,18 +12,24 @@ const Home = () => {
   const [activeComponent, setActiveComponent] = useState("login");
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
-      history.push('/desktop');
+      history.push("/desktop");
     }
   }, [history]);
 
   const toggleComponent = () => {
-    setActiveComponent(prevComponent => prevComponent === "signup" ? "login" : "signup");
+    setActiveComponent((prevComponent) =>
+      prevComponent === "signup" ? "login" : "signup"
+    );
   };
+
   return (
     <>
-      <Hero className="illustration-section-01" />
+      <Hero
+        className="illustration-section-01"
+        onSignUpButtonClick={toggleComponent}
+      />
       <FeaturesSplit
         invertMobile
         topDivider
@@ -35,9 +39,9 @@ const Home = () => {
       <FeaturesTiles />
       <Testimonial topDivider />
       {activeComponent === "login" ? (
-        <Login toggleComponent={toggleComponent} split />
+        <Login id="login" toggleComponent={toggleComponent} split />
       ) : (
-        <SignUp toggleComponent={toggleComponent} split />
+        <SignUp id="signup" toggleComponent={toggleComponent} split />
       )}
     </>
   );

@@ -75,7 +75,7 @@ const Login = ({
 
   return (
     <section {...props} className={outerClasses}>
-      <div id="login" className="container">
+      <div  className="container">
 
           <div className="box">
             <h2>Sign in</h2>

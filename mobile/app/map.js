@@ -7,30 +7,27 @@ import {
   Text,
 } from "react-native";
 import { Stack, useRouter } from "expo-router";
-import { COLORS, icons, images, SIZES } from "../constants";
+import { COLORS, icons, SIZES } from "../constants";
 import { clearSession } from "../services/StorageService";
 import { getData } from "../services/StorageService";
 import { ScreenHeaderBtn } from "../components";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
-import { useNavigation } from '@react-navigation/native';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import SolicitationService from "../services/SolicitationService";
 
-const Map = ({id}) => {
+const Map = ({ id }) => {
   const router = useRouter();
   const [userLocation, setUserLocation] = useState({});
   const [socket, setSocket] = useState(null);
   const route = useRoute();
-  const ip = '52.7.196.103'
+  const ip = "52.7.196.103";
   const navigation = useNavigation();
-
+  const [isSharingLocation, setShareLocation] = useState(true);
   const handleMapPress = (id) => {
-    navigation.navigate('map-details', { id });
-   
-  }
-
- 
+    navigation.navigate("map-details", { id });
+  };
 
   useEffect(() => {
     (async () => {
@@ -40,79 +37,63 @@ const Map = ({id}) => {
       } else {
         alert("Permissions not granted for share location");
       }
-      const loc = await Location.getCurrentPositionAsync();
-      setUserLocation(loc);
-      
-    })();
-  }, []);
 
+      const checkToken = async () => {
+        const token = await getData("token");
+
+        if (!token) {
+          router.push(`/`);
+        }
+      };
+      await checkToken();
+    })();
+  }, [route.params.id]);
 
   useEffect(() => {
     // create a new WebSocket object
     const newSocket = new WebSocket(
       `ws://${ip}:5001?solicitationId=${route.params.id}`
     );
-  
-    // set the socket state to the new WebSocket object
-    setSocket(newSocket);
-  
+
+    setInterval(async () => {
+      await updateLocation(newSocket);
+    }, 4000);
+
     // handle WebSocket events
     newSocket.onopen = () => {
       alert("WebSocket connected");
     };
-  
-    newSocket.onmessage = (event) => {
-      console.log("WebSocket message received: ", event.data);
-    };
-  
+
     newSocket.onclose = () => {
       console.log("WebSocket disconnected");
     };
-  
+
     newSocket.onerror = (error) => {
       console.log("WebSocket error: ", error);
     };
-  
+
     // cleanup function to close the WebSocket connection when the component unmounts
     return () => {
       if (socket) {
         socket.close();
       }
     };
-  }, [id]);
-  const updateLocation = async () => {
+  }, [route.params.id]);
+
+  const updateLocation = async (socket) => {
     const loc = await Location.getCurrentPositionAsync();
     setUserLocation(loc);
-
-    console.log(`${loc.coords.latitude} ${loc.coords.longitude}`) // Here is 
+    const token = await getData("token");
+    if (!token || !isSharingLocation) {
+      console.log("User is not available");
+      return;
+    }
+    // Printing  current GPS location
+    console.log(`${loc.coords.latitude} ${loc.coords.longitude}`);
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(`${loc.coords.latitude} ${loc.coords.longitude}`);
     }
-
   };
-
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await getData("token");
-
-      if (!token) {
-        router.push(`/`);
-      }
-    };
-    checkToken();
-  }, [router]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      updateLocation();
-    }, 2000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
-  
-
- 
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.dark }}>
@@ -156,31 +137,35 @@ const Map = ({id}) => {
               marginBottom: 32,
             }}
             onPress={() => {
-               
-              SolicitationService.reply(route.params.id,0).then(()=> {
+              SolicitationService.reply(route.params.id, 0).then(() => {
+                setShareLocation(false);
                 alert("Refused to share location successfully");
-                router.push(`/jobs`);
-              })
+                navigation.navigate('Jobs'); 
+                
+              });
             }}
           >
             <Text style={{ color: "#fff", fontSize: 18 }}>Finish walk</Text>
           </TouchableOpacity>
           <View>
-            {userLocation.coords && (
+            {userLocation.coords ? (
               <>
-                <Text style={{ color: "#fff", fontSize: 18 }}>
-                  id:{route.params.id}
+                <Text style={{ color: "#fff", fontSize: 18, opacity: .8 }}>
+                  Latitude:{" "}
+                  <Text style={{ color: "#fff", fontSize: 18, opacity: 0.25 }}>
+                    {userLocation.coords.latitude}
+                  </Text>
                 </Text>
-                <Text style={{ color: "#fff", fontSize: 18 }}>
-                  Latitude: {userLocation.coords.latitude}
-                </Text>
-                <Text style={{ color: "#fff", fontSize: 18 }}>
-                  Longitude: {userLocation.coords.longitude}
+                <Text style={{ color: "#fff", fontSize: 18, opacity: .8 }}>
+                  Longitude:{" "}
+                  <Text style={{ color: "#fff", fontSize: 18,opacity: 0.25  }}>
+                    {userLocation.coords.longitude}
+                  </Text>
                 </Text>
 
                 <MapView
-                userInterfaceStyle={'dark'}
-                  style={{ height: 400,marginTop:32,borderRadius: 10 }}
+                  userInterfaceStyle={"dark"}
+                  style={{ height: 400, marginTop: 32, borderRadius: 10 }}
                   initialRegion={{
                     latitude: userLocation.coords.latitude,
                     longitude: userLocation.coords.longitude,
@@ -194,10 +179,19 @@ const Map = ({id}) => {
                       longitude: userLocation.coords.longitude,
                     }}
                     title={"You are here"}
-                   
                   />
                 </MapView>
               </>
+            ) : (
+              <View
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: 70,
+                }}
+              >
+                <Text style={{ color: "#fff", fontSize: 18 }}>LOADING ...</Text>
+              </View>
             )}
           </View>
         </View>

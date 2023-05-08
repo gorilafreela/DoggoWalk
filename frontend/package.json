@@ -16,6 +16,7 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.4",
+    "react-scroll": "^1.8.9",
     "ws": "^8.13.0"
   },
   "repository": {
