@@ -112,7 +112,7 @@ Start Server:
 
 ```npm start```
 
-## node.js
+## React native
 
 [Back-end folder](/backend/)
 
