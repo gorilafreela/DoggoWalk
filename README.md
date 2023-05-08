@@ -2,8 +2,6 @@
 
 **React.js website:** http://52.7.196.103
 
-**APK mobile:**
-
 **Test users:** 
 
   [
@@ -139,6 +137,10 @@ Start testing:
 
 [Back-end folder](/backend/)
 
+Install expo cli
+
+```npm install -g expo-cli```
+
 Install dependencies:
 
 ```npm install```
@@ -146,6 +148,12 @@ Install dependencies:
 Start using Expo:
 
 ```npx expo start --clear```
+
+After start npx expo just open our cammera and point to QR code
+
+Expo Go (ios) : [https://apps.apple.com/br/app/expo-go/id982107779]
+
+Expo Go  (Android): [https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www&pli=1]
 
 ## MIT License
 
