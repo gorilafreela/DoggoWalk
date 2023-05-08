@@ -24,9 +24,6 @@ async function addDocument(from, to) {
   }
 }
 
-
-addDocument('645342d7151e89268cfb8ae5','645343b837ac153298aff67e')
-
 async function updateById(id, data) {
   await Solicitation.findByIdAndUpdate(id, data);
   return await Solicitation.findById(id);

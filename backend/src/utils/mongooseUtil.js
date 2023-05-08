@@ -3,6 +3,10 @@ const envUtil = require('./envUtil.js')
 
 let mainBd = 'DoggoWalk-db'
 
+if (envUtil.isTest()) {
+    mainBd = 'DoggoWalk-db-test'
+}
+
 /**
  * Conexão Mongodb
  */
@@ -16,7 +20,25 @@ function connect() {
 }
 
 
+function deleteAll() {
+    if (envUtil.isTest()) {
+      return new Promise((resolve, reject) => {
+        mongoose.connection.once('open', async () => {
+          try {
+            await mongoose.connection.db.dropDatabase();
+            console.log('dropDatabase');
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  }
+  
 
 module.exports = {
-    connect
+    connect,deleteAll
 }

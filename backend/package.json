@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest ./src/tests/",
+    "test": "jest ./src/tests/test.js",
     "start": "node ./src/app.js --dev",
     "start-test": "node ./src/app.js --test",
     "start-prod": "node ./src/app.js --prod",
@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "jest": "^29.5.0",
+    "jest-cli": "^29.5.0",
     "jsdoc": "^3.6.10",
     "nodemon": "^1.19.2"
   }
