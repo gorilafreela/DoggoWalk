@@ -149,11 +149,11 @@ Start using Expo:
 
 ```npx expo start --clear```
 
-After start npx expo just open our cammera and point to QR code
+After start npx expo just open our cammera and point to QR code using Expo Go application:
 
 Expo Go (ios) : [https://apps.apple.com/br/app/expo-go/id982107779]
 
-Expo Go  (Android): [https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www&pli=1]
+**Obs limitations:** Android is a great platform for developing open source projects, but there are certain limitations when it comes to integrating with Google Maps. In order to use Google Maps on an Android app, you need an API key. Unfortunately, this API key is not open source, require a credit card to use it, so it presents a challenge for developers who want to create a 100% open source project. Since this project is not for commercial use, but to learning and demostrate websocket in geolocation, now It's not a essential need.
 
 ## MIT License
 
