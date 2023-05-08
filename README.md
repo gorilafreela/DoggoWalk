@@ -58,6 +58,7 @@ Repository: The fourth layer is responsible for interacting with the database or
 3. Node.js (Express.js, ws)
 4. MongoDB
 5. CSS/SCSS
+6. Jest for API testing
 
 #### Security
 
@@ -129,6 +130,10 @@ Install dependencies:
 Start Server:
 
 ```npm start```
+
+Start testing:
+
+```npm run test```
 
 ## React native
 
