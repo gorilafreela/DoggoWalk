@@ -32,12 +32,11 @@ const styles = StyleSheet.create({
   },
   jobName: {
     fontSize: SIZES.medium,
-    fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
     color: COLORS.primary,
   },
   jobType: {
     fontSize: SIZES.small + 2,
-    fontFamily: "DMRegular",
+    //fontFamily: "DMRegular",
     color: COLORS.gray,
     marginTop: 3,
     textTransform: "capitalize",

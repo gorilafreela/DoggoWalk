@@ -13,20 +13,20 @@ const Layout = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        DMBold: require("../assets/fonts/DMSans-Bold.ttf"),
-        DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
-        DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
-      });
-      setFontsLoaded(true);
-    };
-    loadFonts();
+    // const loadFonts = async () => {
+    //   await Font.loadAsync({
+    //     DMBold: require("../assets/fonts/DMSans-Bold.ttf"),
+    //     DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
+    //     DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
+    //   });
+    //   setFontsLoaded(true);
+    // };
+    // loadFonts();
   }, []);
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  // if (!fontsLoaded) {
+  //   return null;
+  // }
 
   return (
     <Stack initialRouteName="home">

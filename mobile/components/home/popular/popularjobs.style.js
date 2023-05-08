@@ -14,18 +14,18 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: SIZES.large,
-    fontFamily: FONT.medium,
+    //fontFamily: FONT.medium,
     color: COLORS.white,
   },
   solicitationTitle: {
     fontSize: SIZES.medium,
-    fontFamily: FONT.medium,
+    //fontFamily: FONT.medium,
     color: "#000000",
     alignSelf: "flex-start",
   },
   headerBtn: {
     fontSize: SIZES.medium,
-    fontFamily: FONT.medium,
+    //fontFamily: FONT.medium,
     color: COLORS.gray,
   },
   cardsContainer: {

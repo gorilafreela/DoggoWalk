@@ -15,6 +15,7 @@ const Popularjobs = () => {
     try {
       SolicitationService.getAll().then((res)=> {
         const solicitations = res.data;
+        console.log(solicitations)
         for (let i = 0; i < solicitations.length; i++) {
           if(solicitations[i].active && solicitations[i].accepted) {
             navigation.navigate('map', { id: solicitations[i]._id });
@@ -67,9 +68,9 @@ const Popularjobs = () => {
                   marginBottom: 5,
                 }}
                 onPress={() => {
-                    SolicitationService.reply(item._id,0).then(()=> {
+                    SolicitationService.reply(item._id,1).then(()=> {
                       alert("Accepted to share location successfully");
-                      navigation.navigate('map', { id: solicitations[i]._id });
+                      navigation.navigate('map', { id: solicitations[index]._id });
                     },(err)=> {
                       alert(err.response.data.message);
                     });

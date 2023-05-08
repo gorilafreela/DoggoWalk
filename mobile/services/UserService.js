@@ -1,9 +1,10 @@
 import axios from "axios";
+import APIconstants from "../constants/APIconstants";
 
 export default class UserService {
   static login(email, password) {
     return axios({
-      url: "http://192.168.3.33:5000/user/login",
+      url: `${APIconstants.baseURL}/user/login`,
       method: "POST",
       data: {
         email,
@@ -12,11 +13,5 @@ export default class UserService {
     });
   }
 
-  static today() {
-    return axios({
-        url: "http://192.168.3.33:5000/user/today",
-        method: "GET",
-        
-      });
-  }
+
 }
