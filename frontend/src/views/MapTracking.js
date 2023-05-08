@@ -66,7 +66,7 @@ const MapTracking = ({
 
   useEffect(() => {
     if (solicitation) {
-      const socket = new WebSocket(`ws://localhost:5001?solicitationId=${id}`);
+      const socket = new WebSocket(`ws://52.7.196.103:5001?solicitationId=${id}`);
       socket.onopen = () => {
         console.log("WebSocket connected");
       };

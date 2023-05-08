@@ -22,7 +22,7 @@ const Map = ({id}) => {
   const [userLocation, setUserLocation] = useState({});
   const [socket, setSocket] = useState(null);
   const route = useRoute();
-  const ip = '192.168.3.33'
+  const ip = '52.7.196.103'
   const navigation = useNavigation();
 
   const handleMapPress = (id) => {
@@ -31,7 +31,7 @@ const Map = ({id}) => {
   }
 
  
- 
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
