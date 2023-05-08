@@ -99,7 +99,7 @@ Solicitations:
  
   - The admin should be able to manage the system settings and configurations
   
-#### Use Cases
+### Use Cases
 
   - A pet owner: visits the DoggoWalk website and signs up for an account. They provide their name, email, and password to create an account. After create the account  they can book there a Walk with a professional walker, and also the pet owner will use the website to see pet's real time location.
   
