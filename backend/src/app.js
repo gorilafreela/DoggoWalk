@@ -9,11 +9,6 @@ const urlUtil = require('./utils/urlUtil')
 //const datetimeUtil = require(urlUtil.getPath('./utils/datetimeUtil.min.js'));
 const loginMiddleware = require(urlUtil.getPath('./middlewares/loginMiddleware.min.js'));
 
-
-
-
-
-
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config()
 }

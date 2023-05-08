@@ -13,6 +13,14 @@
       ]
     ],
     "name": "mobile",
-    "slug": "mobile"
+    "slug": "mobile",
+    "extra": {
+      "eas": {
+        "projectId": "aac7a204-320c-495c-87d0-cca65f742822"
+      }
+    },
+    "android": {
+      "package": "com.adrielkirch.mobile"
+    }
   }
 }
