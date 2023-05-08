@@ -14,6 +14,9 @@ In short, Doggowalk is a comprehensive solution that leverages the latest in mob
 
 
 ![236717864-189552e1-64f7-4912-ae14-2a345aca2b81](https://user-images.githubusercontent.com/98602969/236718108-800d42ed-9fc3-4550-96fa-2be01b2a03f0.png)
+<img src="https://user-images.githubusercontent.com/98602969/236720829-42096e36-68d1-472a-aea8-62780e566e15.png" alt="image" width="65%">
+
+
 
 ## software engineer
 
