@@ -2,8 +2,6 @@
 
 **React.js website:** http://52.7.196.103
 
-**APK mobile:**
-
 **Test users:** 
 
   [
@@ -58,6 +56,7 @@ Repository: The fourth layer is responsible for interacting with the database or
 3. Node.js (Express.js, ws)
 4. MongoDB
 5. CSS/SCSS
+6. Jest for API testing
 
 #### Security
 
@@ -130,9 +129,17 @@ Start Server:
 
 ```npm start```
 
+Start testing:
+
+```npm run test```
+
 ## React native
 
 [Back-end folder](/backend/)
+
+Install expo cli
+
+```npm install -g expo-cli```
 
 Install dependencies:
 
@@ -141,6 +148,12 @@ Install dependencies:
 Start using Expo:
 
 ```npx expo start --clear```
+
+After start npx expo just open our cammera and point to QR code
+
+Expo Go (ios) : [https://apps.apple.com/br/app/expo-go/id982107779]
+
+Expo Go  (Android): [https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www&pli=1]
 
 ## MIT License
 
