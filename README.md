@@ -1,21 +1,5 @@
 # DoggoWalk
 
-**React.js website:** http://52.7.196.103
-
-**Test users:** 
-
-  [
-  { email: 'customer@gmail.com'},
-  
-  { email: 'walker@gmail.com'},
-  
-  { email: 'walker@hotmail.com'},
-  
-  { email: 'walker@outlook.com'}
-  ]
- 
-**password for all:** 123
-
 
 Doggowalk is a cutting-edge solution for pet owners and dog walkers alike. With the power of mobile live tracking, our app makes it easy to keep an eye on your furry friend's walks, no matter where they are.
 
